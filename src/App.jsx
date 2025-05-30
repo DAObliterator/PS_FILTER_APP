@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import studentBranchFun from "./utils/test";
 import { FormValidErr } from "./components/FormValidErr";
+import {FaGithub, FaInstagram} from "react-icons/fa";
+
 import axios from "axios";
 
 function App() {
@@ -202,6 +204,29 @@ function App() {
       ) : (
         <h1>No Stations Found</h1>
       )}
+      <div
+        id="Socials"
+        className="flex flex-row justify-center gap-10 w-full items-center py-4"
+      >
+        <a
+          href="https://www.instagram.com/saradh_75?igsh=bzd1MXVhZjlqajQ2"
+          aria-label="Instagram"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-2xl hover:text-pink-600 transition-colors"
+        >
+          <FaInstagram />
+        </a>
+        <a
+          href="https://github.com/DAObliterator"
+          aria-label="GitHub"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-2xl hover:text-gray-400 transition-colors"
+        >
+          <FaGithub />
+        </a>
+      </div>
     </div>
   );
 }
