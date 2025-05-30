@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import studentBranchFun from "./utils/test";
-import { FormValidErr } from "./components/formValidErr";
+import { FormValidErr } from "./components/FormValidErr";
 import axios from "axios";
 
 function App() {
