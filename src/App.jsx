@@ -38,10 +38,12 @@ function App() {
       .post(`${import.meta.env.VITE_API}/stations/getAllStations`, { data })
       .then((response) => {
         if (response.status === 200) {
-          console.log(
-            "Response from Endpoint \n",
-            JSON.stringify(response.data.eligibleStations)
-          );
+          if ( import.meta.env.VITE_ENV === "development") {
+            console.log(
+              "Response from Endpoint \n",
+              JSON.stringify(response.data.eligibleStations)
+            );
+          }
           setFilteredStationsArr(response.data.eligibleStations);
         }
       })
@@ -57,7 +59,7 @@ function App() {
   return (
     <div
       id="App"
-      className=" min-h-screen text-black bg-slate-800 flex flex-col justify-evenly items-center p-2 text-3xl min-w-full "
+      className=" min-h-screen text-black bg-slate-800 flex flex-col justify-evenly items-center p-2  min-w-screen "
     >
       <h1 className="text-white text-5xl font-bold tracking-wide p-4 ">
         Welcome to the PS Filter App
@@ -65,13 +67,13 @@ function App() {
       <form
         action=""
         id="Filter-Panel"
-        className="flex flex-col justify-evenly items-center p-4 m-2 bg-slate-950 rounded-md text-black  "
+        className="flex flex-col justify-evenly items-center p-4 m-2 bg-slate-950 rounded-md text-black sm:w-3/4 md:w-1/2 w-full"
         onSubmit={handleSubmit(onSubmit)}
       >
         <input
           type="text"
           placeholder="Branch - A3/A4/A7 ..."
-          className="rounded-full p-2 "
+          className="rounded-full p-2 w-full"
           {...register("branch", {
             required: "Required",
             validate: (value) => studentBranchFun(value) !== undefined,
@@ -91,7 +93,7 @@ function App() {
         <select
           id="Business-Domain"
           name="business-domain"
-          className="text-2xl font-semibold text-black tracking-wide"
+          className=" font-semibold text-black tracking-wide w-ful"
           {...register("business_domain")}
         >
           <option value="CSIS/IT">CSIS/IT</option>
@@ -108,7 +110,7 @@ function App() {
         <select
           id="Project-Domain"
           name="project-domain"
-          className="text-2xl font-semibold text-black tracking-wide"
+          className=" font-semibold text-black tracking-wide w-full"
           {...register("project_domain")}
         >
           <option value="Electronics">Electronics</option>
@@ -147,35 +149,56 @@ function App() {
         </button>
       </form>
       {filteredStationsArr.length > 0 ? (
-        <table
-          id="Stations-Table"
-          className="rounded-md shadow-md bg-black text-white p-2 sm:p-4 m-2 sm:m-4 text-xs max-w-1/2"
-        >
-          <tr className="text-xl bg-gray-800 ">
-            <th>Station Id</th>
-            <th>Station Name</th>
-            <th>City</th>
-            <th>Total Project</th>
-            <th>Business Domain</th>
-            <th>Branches Eligible</th>
-            <th>Project Domain</th>
-            <th>Title</th>
-          </tr>
-          {filteredStationsArr.map((e , index ) => {
-            return (
-              <tr style={index%2 ? { backgroundColor: "gray"} : {backgroundColor: "black"}} className="overflow:auto" >
-                <th>{e["Station Id"]}</th>
-                <th>{e["Station Name"]}</th>
-                <th>{e["Centre (City)"]}</th>
-                <th>{e["Total Project"]}</th>
-                <th>{e["Business Domain"]}</th>
-                <th>{e["Tags"]}</th>
-                <th>{e["Project Domain"]}</th>
-                <th>{e["Title"]}</th>
+        <div className="overflow-x-auto w-full">
+          <table
+            id="Stations-Table"
+            className="min-w-full rounded-md shadow-md bg-black text-white text-xs sm:text-sm"
+          >
+            <thead>
+              <tr className="text-sm bg-gray-800">
+                <th className="p-2 whitespace-nowrap">Station Id</th>
+                <th className="p-2 whitespace-nowrap">Station Name</th>
+                <th className="p-2 whitespace-nowrap">City</th>
+                <th className="p-2 whitespace-nowrap">Total Project</th>
+                <th className="p-2 whitespace-nowrap">Business Domain</th>
+                <th className="p-2 whitespace-nowrap">Branches Eligible</th>
+                <th className="p-2 whitespace-nowrap">Project Domain</th>
+                <th className="p-2 whitespace-nowrap">Title</th>
               </tr>
-            );
-          })}
-        </table>
+            </thead>
+            <tbody>
+              {filteredStationsArr.map((e, index) => {
+                return (
+                  <tr
+                    key={index}
+                    className={`${
+                      index % 2 ? "bg-gray-700" : "bg-black"
+                    } text-xs sm:text-sm`}
+                  >
+                    <td className="p-2 whitespace-nowrap">{e["Station Id"]}</td>
+                    <td className="p-2 whitespace-nowrap">
+                      {e["Station Name"]}
+                    </td>
+                    <td className="p-2 whitespace-nowrap">
+                      {e["Centre (City)"]}
+                    </td>
+                    <td className="p-2 whitespace-nowrap">
+                      {e["Total Project"]}
+                    </td>
+                    <td className="p-2 whitespace-nowrap">
+                      {e["Business Domain"]}
+                    </td>
+                    <td className="p-2 whitespace-nowrap">{e["Tags"]}</td>
+                    <td className="p-2 whitespace-nowrap">
+                      {e["Project Domain"]}
+                    </td>
+                    <td className="p-2 whitespace-nowrap">{e["Title"]}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
       ) : (
         <h1>No Stations Found</h1>
       )}
