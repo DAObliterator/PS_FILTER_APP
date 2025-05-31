@@ -6,12 +6,14 @@ import { FormValidErr } from "./components/FormValidErr";
 import {FaGithub, FaInstagram} from "react-icons/fa";
 
 import axios from "axios";
+import Loader from "./components/Loader";
 
 function App() {
   const [branch, setBranch] = useState("");
   const [businessDomain, setBusinessDomain] = useState("");
   const [projectDomain, setProjectDomain] = useState("");
   const [filteredStationsArr, setFilteredStationsArr] = useState([]);
+  const [ loading , setLoading ] = useState(false);
 
   const {
     register,
@@ -34,7 +36,10 @@ function App() {
   };*/
 
   const onSubmit = (data) => {
+
     console.log(data);
+
+    setLoading(true);
 
     axios
       .post(`${import.meta.env.VITE_API}/stations/getAllStations`, { data })
@@ -55,7 +60,7 @@ function App() {
           " err happened when fetching stations !!! ",
           err.status
         );
-      });
+      }).finally(() => setLoading(false));
   };
 
   return (
@@ -150,7 +155,8 @@ function App() {
           Submit
         </button>
       </form>
-      {filteredStationsArr.length > 0 ? (
+      {loading && <Loader></Loader>}
+      {filteredStationsArr.length > 0 && !loading ? (
         <div className="overflow-x-auto w-full">
           <table
             id="Stations-Table"
